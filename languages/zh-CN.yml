@@ -141,3 +141,11 @@ quiz:
   essay: 问答题
   gap_fill: 填空题
   mistake: 错题备注
+
+isOutdated:
+    format_year_as_prefix: '{{year}}年'
+    format_month_as_prefix: '{{month}}个月'
+    format_month_as_suffix: '零{{month}}个月'
+    format_day_as_prefix: '{{day}}天'
+    format_day_as_suffix: '零{{day}}天'
+    template: <div class='note warning'><p><span class='label warning'>时效性提示</span><br>这是一篇发布于 <span class='pink'>{{publish}}</span> 前，最后一次更新距今已经 <span class='pink'>{{updated}}</span> 的文章，部分内容可能已经过时，请注意甄别。</p></div>

@@ -287,3 +287,78 @@ const clipBoard = function(str, callback) {
   BODY.removeChild(ta);
 }
 
+const isOutdated = function() {
+    if (CONFIG.isOutdated.enable && LOCAL.isOutdated) {
+        var times = document.getElementsByTagName("time");
+        if (times.length === 0) {
+            return;
+        }
+        var posts = document.getElementsByClassName("body md");
+        if (posts.length === 0) {
+            return;
+        }
+
+        var now = Date.now(); // 当前时间戳
+        var pubTime = new Date(times[0].dateTime); // 文章发布时间戳
+        if (times.length === 1) {
+            var updateTime = pubTime; // 文章发布时间亦是最后更新时间
+        } else {
+            var updateTime = new Date(times[1].dateTime); // 文章最后更新时间戳
+        }
+        var interval = parseInt(now - updateTime); // 时间差
+        var days = parseInt(CONFIG.isOutdated.days) || 30; // 设置时效，默认硬编码 30 天
+        // 最后一次更新时间超过 days 天（毫秒）
+        var dayLevelValue = 24 * 60 * 60 * 1000;
+        if (interval > days * dayLevelValue) {
+            var monthLevelValue = 30 * 24 * 60 * 60 * 1000;
+            var yearLevelValue = 365 * 24 * 60 * 60 * 1000;
+
+            function getDifference(period) {
+                /******* 计算出时间差中的年、月、日 *******/
+                function getYear(period) {
+                    return parseInt(period) / yearLevelValue;
+                }
+                function getMonth(period) {
+                    return parseInt(period) / monthLevelValue;
+                }
+                function getDay(period) {
+                    return parseInt(period) / dayLevelValue;
+                }
+                function isEmpty(obj){
+                    if(typeof obj == "undefined" || obj == null || obj == ""){
+                        return true;
+                    }else{
+                        return false;
+                    }
+                }
+                var year = parseInt(getYear(period));
+                var month = parseInt(getMonth(period - year * yearLevelValue));
+                var day = parseInt(getDay(period - year * yearLevelValue - month * monthLevelValue));
+
+                var result = "";
+                if (year != 0) {
+                    result += LOCAL.format_year_as_prefix.replace("{{year}}", year)
+                }
+                if (month != 0) {
+                    if (isEmpty(result)) {
+                        result += LOCAL.format_month_as_prefix.replace("{{month}}", month)
+                    } else {
+                        result += LOCAL.format_month_as_suffix.replace("{{month}}", month)
+                    }
+                }
+                if (day != 0) {
+                    if (isEmpty(result)) {
+                        result += LOCAL.format_day_as_prefix.replace("{{day}}", day)
+                    } else {
+                        result += LOCAL.format_day_as_suffix.replace("{{day}}", day)
+                    }
+                }
+                return result;
+            }
+            var publish = getDifference(now - pubTime);
+            var updated = getDifference(interval);
+            var template = LOCAL.template.replace("{{publish}}", publish).replace("{{updated}}", updated);
+            posts[0].insertAdjacentHTML("afterbegin", template);
+        }
+    }
+};

@@ -72,25 +72,30 @@
         </g>
       </svg>
     </div>
-    <main>
-      <div class="inner">
-        <div id="main" class="pjax">
-          {% block content %}{% endblock %}
+
+    <div id="bgpic">
+      <div id="mask"></div>
+      <main>
+        <div class="inner">
+          <div id="main" class="pjax">
+            {% block content %}{% endblock %}
+          </div>
+          <div id="sidebar">
+            {% block sidebar %}{{ sidebar.render() }}{% endblock %}
+          </div>
+          <div class="dimmer"></div>
         </div>
-        <div id="sidebar">
-          {% block sidebar %}{{ sidebar.render() }}{% endblock %}
+      </main>
+      <footer id="footer">
+        <div class="inner">
+          <div class="widgets">
+            {{ widgets.render() }}
+          </div>
+          {{ partial('_partials/footer.njk', {}, {cache: true}) }}
         </div>
-        <div class="dimmer"></div>
-      </div>
-    </main>
-    <footer id="footer">
-      <div class="inner">
-        <div class="widgets">
-          {{ widgets.render() }}
-        </div>
-        {{ partial('_partials/footer.njk', {}, {cache: true}) }}
-      </div>
-    </footer>
+      </footer>
+    </div>
+
   </div>
 
 {%- set ccIcon = '<i class="ic i-creative-commons"></i>' %}
@@ -108,7 +113,10 @@
       stats: "{{ __('search.stats') }}"
     },
     {%- if theme.widgets.recent_comments or page.comment !== false  %}
-    valine: {{ page.valine|safedump if page.valine else "true"  }},{%- endif %}
+    waline: {{ page.waline|safedump if page.waline else "true"  }},
+    gitalk: {{ page.gitalk|safedump if page.gitalk else "true"  }},{%- endif %}
+    {%- if page.comment !== false  %}
+    waline: {{ page.waline|safedump if page.waline else "true"  }},{%- endif %}
     {%- if page.chart %}chart: true,{%- endif %}
     {%- if page.math %}copy_tex: true,
     katex: true,{%- endif %}
@@ -129,6 +137,17 @@
       gap_fill: "{{ __('quiz.gap_fill') }}",
       mistake: "{{ __('quiz.mistake') }}"
     },{%- endif %}
+    {%- if page.isOutdated === false %}
+        isOutdated: false,
+    {%- else %}
+        isOutdated: true,
+        format_year_as_prefix: "{{ __('isOutdated.format_year_as_prefix') }}",
+        format_month_as_prefix: "{{ __('isOutdated.format_month_as_prefix') }}",
+        format_month_as_suffix: "{{ __('isOutdated.format_month_as_suffix') }}",
+        format_day_as_prefix: "{{ __('isOutdated.format_day_as_prefix') }}",
+        format_day_as_suffix: "{{ __('isOutdated.format_day_as_suffix') }}",
+        template: "{{ __('isOutdated.template') }}",
+    {%- endif %}
     ignores : [
       function(uri) {
         return uri.includes('#');
@@ -143,6 +162,7 @@
 </script>
 
 <script src="https://cdn.polyfill.io/v2/polyfill.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/GardenHamster/live2d-widget@latest/autoload.js"></script>
 
 {{ _vendor_js() }}
 

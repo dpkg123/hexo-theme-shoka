@@ -141,3 +141,11 @@ quiz:
   essay: 問答
   gap_fill: 空欄
   mistake: 間違った答え
+
+isOutdated:
+    format_year_as_prefix: '{{year}}'
+    format_month_as_prefix: '{{month}} 月'
+    format_month_as_suffix: 'ゼロ {{month}} か月'
+    format_day_as_prefix: '{{day}} 日'
+    format_day_as_suffix: 'ゼロ {{day}} 日'
+    template: <div class='note warning'><p><span class='label warning'>適時性の警告</span><br> <span class='pink'>{{publish}}</span> 前に公開され、 <span class='pink'>{{updated}}</span> 前に最終更新された記事です。一部のコンテンツは時代遅れかもしれません、スクリーニングに注意してください。</p></div>

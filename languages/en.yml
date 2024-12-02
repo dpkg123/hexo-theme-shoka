@@ -141,3 +141,11 @@ quiz:
   essay: Questions
   gap_fill: Gap Filling
   mistake: Wrong Answer
+
+isOutdated:
+    format_year_as_prefix: '{{year}}'
+    format_month_as_prefix: '{{month}} month'
+    format_month_as_suffix: 'and {{month}} months'
+    format_day_as_prefix: '{{day}} days'
+    format_day_as_suffix: 'and {{day}} days'
+    template: <div class='note warning'><p><span class='label warning'>Timeliness Alert</span><br>This is an article published <span class='pink'>{{publish}}</span> ago and last updated <span class='pink'>{{updated}}</span> days ago. Some information may be outdated, please pay attention to screening.</p></div>

@@ -1,6 +1,7 @@
 .post-nav {
   display: flex;
   margin-bottom: 2.5rem;
+  padding: 0 1.25rem;
 
   +mobile() {
     flex-direction: column;
@@ -10,6 +11,7 @@
     width: 50%;
     +mobile() {
       width: 100%;
+      min-height: 200px;
     }
 
     a {
@@ -19,6 +21,7 @@
       color: var(--header-text-color);
       padding: 1.25rem 2.5rem;
       background-size: cover;
+      background-position: 30% 50%;
       position: relative;
 
       &::before {

@@ -55,21 +55,24 @@ const siteRefresh = function (reload) {
   vendorJs('copy_tex');
   vendorCss('mermaid');
   vendorJs('chart');
-  vendorJs('valine', function() {
-    var options = Object.assign({}, CONFIG.valine);
-    options = Object.assign(options, LOCAL.valine||{});
+
+if(CONFIG.waline.serverURL) {
+  vendorJs('waline', function() {
+    var options = Object.assign({}, CONFIG.waline);
+    options = Object.assign(options, LOCAL.waline||{});
     options.el = '#comments';
     options.pathname = LOCAL.path;
     options.pjax = pjax;
     options.lazyload = lazyload;
 
-    new MiniValine(options);
+    new Waline(options);
 
     setTimeout(function(){
       positionInit(1);
-      postFancybox('.v');
+      postFancybox('.waline-container');
     }, 1000);
-  }, window.MiniValine);
+  }, window.Waline);
+}
 
   if(!reload) {
     $.each('script[data-pjax]', pjaxScript);
@@ -99,6 +102,7 @@ const siteRefresh = function (reload) {
   cardActive()
 
   lazyload.observe()
+  isOutdated()
 }
 
 const siteInit = function () {
@@ -122,7 +126,12 @@ const siteInit = function () {
   visibilityListener()
   themeColorListener()
 
-  algoliaSearch(pjax)
+
+if (CONFIG.localSearch != null) {
+    localSearch(pjax)
+  }else if(CONFIG.search != null) {
+    algoliaSearch(pjax)
+  }
 
   window.addEventListener('scroll', scrollHandle)
 
@@ -142,3 +151,4 @@ const siteInit = function () {
 window.addEventListener('DOMContentLoaded', siteInit);
 
 console.log('%c Theme.Shoka v' + CONFIG.version + ' %c https://shoka.lostyu.me/ ', 'color: white; background: #e9546b; padding:5px 0;', 'padding:4px;border:1px solid #e9546b;')
+
